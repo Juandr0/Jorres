@@ -3,7 +3,7 @@ import Colors from '../constants/AppColors';
 
 const dividerStyles: ViewStyle = {
     height: 1,
-    backgroundColor: Colors.themeColors.secondary,
+    backgroundColor: Colors.themeColors.backgroundTertiary,
     width: '100%'
 }
 

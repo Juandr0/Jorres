@@ -2,9 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import Header from './components/header'
 import Body from './components/body'
-import AddFab from './components/AddFab';
 import Colors from './constants/AppColors'
-import Divider from './components/Divider';
+import Footer from './components/Footer';
 
 export default function App() {
   return (
@@ -12,8 +11,7 @@ export default function App() {
       <View style={styles.container}>
         <Header />
         <Body />
-        <Divider />
-        <AddFab />
+        <Footer />
       </View>
       <StatusBar style="auto" />
     </SafeAreaView >

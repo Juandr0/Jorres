@@ -1,16 +1,17 @@
-const primary = '#81F0E5'
-const secondary = '#563635'
+const primary = '#FFF'
 const tertiary = '#6E9075'
 
-const backgroundPrimary = '#6E9075'
-const backgroundSecondary = '#78C091'
+const backgroundPrimary = '#999999'
+const backgroundSecondary = '#696969'
+const backgroundTertiary = '#E5E5E5'
+
 
 export default {
     themeColors: {
         primary,
-        secondary,
         tertiary,
         backgroundPrimary,
         backgroundSecondary,
+        backgroundTertiary,
     },
 };
