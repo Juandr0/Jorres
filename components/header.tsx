@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     headerContainer: {
         height: 60,
         justifyContent: 'center',
-        backgroundColor: Colors.themeColors.tertiary,
+        backgroundColor: Colors.themeColors.backgroundSecondary,
 
     },
     headerText: {

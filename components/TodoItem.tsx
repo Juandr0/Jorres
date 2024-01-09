@@ -33,17 +33,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginHorizontal: 10,
 
-        paddingVertical: 20,
+        paddingVertical: 15,
         paddingHorizontal: 10,
 
-        borderRadius: 15,
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: Colors.themeColors.secondary,
+        borderColor: Colors.themeColors.backgroundTertiary,
 
     },
     text: {
         flex: 1,
-        color: 'black',
+        color: 'white',
+        fontSize: 16
     },
 
 })
