@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, FlatList, Text, ViewStyle } from 'react-native';
-import TodoItem from './TodoItem';
-import Categories from '../constants/categories';
-import Layout from '../constants/Layout';
+import TodoItem from '../../../components/TodoItem';
+import Categories from '../../../constants/categories';
+import Layout from '../../../constants/Layout';
 
-export default function Body() {
+export default function Body({ }) {
     const [items, setItems] = useState([
         { name: 'Köttfärs', category: Categories.Food, price: 49, key: 1 },
         { name: 'Ben & Jerrys', category: Categories.Snacks, price: 55, key: 2 },

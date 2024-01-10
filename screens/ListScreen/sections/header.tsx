@@ -1,15 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text, ViewStyle } from 'react-native';
-import Colors from '../constants/AppColors'
-import Divider from './Divider'
+import Colors from '../../../constants/AppColors'
+import Divider from '../../../components/Divider'
 
 export default function Header() {
     return (
         <View>
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerText}> Jorres Kiosk - admin page</Text>
-            </View>
-            <Divider />
+
             <View style={styles.itemCategories}>
                 <Text style={styles.itemsText}>Name</Text>
                 <Text style={styles.itemsText}>Category</Text>
@@ -26,7 +23,6 @@ const styles = StyleSheet.create({
         height: 60,
         justifyContent: 'center',
         backgroundColor: Colors.themeColors.backgroundSecondary,
-
     },
     headerText: {
         color: 'white',
