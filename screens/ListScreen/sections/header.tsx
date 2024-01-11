@@ -6,14 +6,14 @@ import Divider from '../../../components/Divider'
 export default function Header() {
     return (
         <View>
-
             <View style={styles.itemCategories}>
-                <Text style={styles.itemsText}>Name</Text>
-                <Text style={styles.itemsText}>Category</Text>
-                <Text style={styles.itemsText}>Price</Text>
+                <Text style={[styles.itemsText]}>Name</Text>
+                <Text style={[styles.itemsText]}>Category</Text>
+                <Text style={[styles.itemsText]}>Price</Text>
+                <Text style={[styles.itemsText]}>Id</Text>
             </View>
             <Divider />
-        </View>
+        </View >
 
     )
 }

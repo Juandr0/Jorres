@@ -4,7 +4,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Header from './sections/header';
 import Body from './sections/body';
 import Colors from '../../constants/AppColors';
-import Divider from '../../components/Divider';
 import AddFab from '../../components/AddFab';
 import { StackScreens } from '../../navigation/screenTypes';
 
@@ -17,7 +16,6 @@ const ListScreen: React.FC<IProps> = ({ navigation }) => {
         <View style={styles.container}>
             <Header />
             <Body />
-            <Divider />
             <AddFab navigation={navigation} />
         </View>
     )

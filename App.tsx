@@ -15,11 +15,10 @@ export default function App() {
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName='HomeScreen'>
-          <Stack.Screen name='HomeScreen' component={ListScreen} options={{ title: 'Jorres Kiosk - Overview' }} />
-          <Stack.Screen name='AddScreen' component={AddScreen} />
+          <Stack.Screen name='HomeScreen' component={ListScreen} options={{ title: 'Overview' }} />
+          <Stack.Screen name='AddScreen' component={AddScreen} options={{ title: 'Add new product' }} />
         </Stack.Navigator>
       </NavigationContainer>
-
       <StatusBar style="auto" />
     </SafeAreaView >
   );

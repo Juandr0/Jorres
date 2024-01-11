@@ -9,24 +9,27 @@ interface TodoItemProps {
         name: string;
         category: Categories;
         price: number;
-        key: number;
+        articleId: number;
     }
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
     return (
         <View style={styles.item}>
-            <Text style={[styles.text, { justifyContent: 'flex-start', textAlign: 'left' }]}>{item.name}</Text>
-            <Text style={[styles.text, { justifyContent: 'center', textAlign: 'center' }]}>{Categories[item.category]}</Text>
-            <Text style={[styles.text, { justifyContent: 'flex-end', textAlign: 'right' }]}>{item.price}:-</Text>
+            <Text style={[styles.text,]}>{item.name}</Text>
+            <Text style={[styles.text, { textAlign: 'center' }]}>{Categories[item.category]}</Text>
+            <Text style={[styles.text, { textAlign: 'right' }]}>{item.price}:-</Text>
+            <Text style={[styles.text, { textAlign: 'right' }]}>{item.articleId}</Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     item: {
-        flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+
         width: Layout.window.width * 0.95,
         backgroundColor: Colors.themeColors.backgroundSecondary,
 
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
     text: {
         flex: 1,
         color: 'white',
-        fontSize: 16
+        fontSize: 16,
     },
 
 })
