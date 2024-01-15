@@ -1,23 +1,24 @@
 import React from 'react';
 import { StyleSheet, View, Text, ViewStyle } from 'react-native';
-import Colors from '../constants/AppColors'
-import Divider from './Divider'
+import Colors from '../../../constants/AppColors'
+import Divider from '../../../components/Divider'
 
 export default function Header() {
     return (
         <View>
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerText}> Jorres Kiosk - admin page</Text>
+            <View style={{ marginVertical: 10 }}>
+                <Text style={styles.headerText}>Admin page</Text>
             </View>
+
             <Divider />
             <View style={styles.itemCategories}>
-                <Text style={styles.itemsText}>Name</Text>
-                <Text style={styles.itemsText}>Category</Text>
-                <Text style={styles.itemsText}>Price</Text>
+                <Text style={[styles.itemsText]}>Name</Text>
+                <Text style={[styles.itemsText]}>Category</Text>
+                <Text style={[styles.itemsText]}>Price</Text>
+                <Text style={[styles.itemsText]}>Id</Text>
             </View>
             <Divider />
-        </View>
-
+        </View >
     )
 }
 
@@ -26,12 +27,11 @@ const styles = StyleSheet.create({
         height: 60,
         justifyContent: 'center',
         backgroundColor: Colors.themeColors.backgroundSecondary,
-
     },
     headerText: {
         color: 'white',
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 40,
         fontWeight: 'bold'
     },
     itemsText: {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     itemCategories: {
-        padding: 10,
+        paddingVertical: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 20,

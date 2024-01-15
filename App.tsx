@@ -1,21 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import Header from './components/header'
-import Body from './components/body'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StackScreens } from './navigation/screenTypes';
+
 import Colors from './constants/AppColors'
-import Footer from './components/Footer';
+import ListScreen from './screens/ListScreen/ListScreen';
+import BottomSheetComponent from './screens/AddScreen/BottomSheetComponent';
+
+const Stack = createNativeStackNavigator<StackScreens>();
 
 export default function App() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Header />
-        <Body />
-        <Footer />
-      </View>
+      <ListScreen />
+    </SafeAreaView>
+  )
+
+  /*
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='HomeScreen'>
+          <Stack.Screen name='HomeScreen' component={ListScreen} options={{ title: 'Overview' }} />
+          <Stack.Screen name='AddScreen' component={BottomSheetComponent} options={{ title: 'Add new product' }} />
+        </Stack.Navigator>
+      </NavigationContainer>
       <StatusBar style="auto" />
     </SafeAreaView >
   );
+  */
 }
 
 const styles = StyleSheet.create({
