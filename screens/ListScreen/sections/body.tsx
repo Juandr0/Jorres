@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, FlatList, Text, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, FlatList, Text, UIManager, LayoutAnimation } from 'react-native';
 import TodoItem from '../../../components/TodoItem';
-import Categories from '../../../constants/categories';
 import Layout from '../../../constants/Layout';
 import Divider from '../../../components/Divider';
+import ItemsManager from '../../../classes/ItemsManager';
+import { Item } from '../../../interfaces/Item';
 
-export default function Body({ }) {
-    const [items, setItems] = useState([
-        { name: 'Köttfärs', category: Categories.Food, price: 49, articleId: 1 },
-        { name: 'Ben & Jerrys', category: Categories.Snacks, price: 55, articleId: 2 },
-        { name: 'Blommor', category: Categories.Other, price: 149, articleId: 3 },
-        { name: 'Chips', category: Categories.Snacks, price: 49, articleId: 4 },
-        { name: 'Lax', price: 129, category: Categories.Food, articleId: 5 },
-    ])
+// Enable layout animations for Android
+UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+
+interface BodyProps {
+    itemsManager: ItemsManager;
+}
+
+const Body: React.FC<BodyProps> = ({ itemsManager }) => {
+    const [items, setItems] = useState(itemsManager.getItems());
+
+    useEffect(() => {
+        const callback = (newItems: Item[]) => {
+            setItems(newItems);
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        };
+
+        itemsManager.subscribe(callback);
+    }, [itemsManager]);
 
     return (
-
         <View style={styles.body}>
             {items.length === 0 ? (
                 <Text>Add items by pressing the plus sign</Text>
@@ -24,7 +34,7 @@ export default function Body({ }) {
                     keyExtractor={(item) => item.articleId.toString()}
                     data={items}
                     renderItem={({ item }) => (
-                        <TodoItem item={item} />
+                        <TodoItem item={item} itemManager={itemsManager} />
                     )}
                     contentContainerStyle={{ paddingBottom: 10 }}
                 />
@@ -32,15 +42,12 @@ export default function Body({ }) {
             <Divider />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     body: {
-        maxHeight: Layout.window.height * 0.67
+        maxHeight: Layout.window.height * 0.67,
     },
-    defaultText: {
-        fontSize: 18,
-        textAlign: 'center',
-    },
-})
+});
 
+export default Body;

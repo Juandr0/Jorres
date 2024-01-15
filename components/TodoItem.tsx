@@ -1,8 +1,10 @@
-import React from 'react';
-import { StyleSheet, View, Text, ViewStyle } from 'react-native';
+import React, { useRef } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, PanResponder, Animated } from 'react-native';
 import Layout from '../constants/Layout'
 import Categories from '../constants/categories';
 import Colors from '../constants/AppColors';
+import ItemsManager from '../classes/ItemsManager';
+
 
 interface TodoItemProps {
     item: {
@@ -11,16 +13,52 @@ interface TodoItemProps {
         price: number;
         articleId: number;
     }
+    itemManager: ItemsManager
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ item, itemManager }) => {
+    const screenWidth = Layout.window.width;
+    const pan = useRef(new Animated.ValueXY()).current;
+
+    const deleteAnimation = Animated.timing(pan, {
+        toValue: { x: -screenWidth, y: 0 },
+        duration: 300,
+        useNativeDriver: false,
+    });
+
+    const resetAnimation = Animated.spring(pan, {
+        toValue: { x: 0, y: 0 },
+        useNativeDriver: false
+    });
+
+    const panResponder = useRef(
+        PanResponder.create({
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderMove: Animated.event([null, { dx: pan.x }]),
+            onPanResponderRelease: (_, gestureState) => {
+                if (gestureState.dx < -50) {
+                    deleteAnimation.start(() => {
+                        itemManager.deleteItem(item);
+                    })
+                } else {
+                    resetAnimation.start();
+                }
+
+            },
+        }),
+    ).current;
+
     return (
-        <View style={styles.item}>
-            <Text style={[styles.text,]}>{item.name}</Text>
-            <Text style={[styles.text, { textAlign: 'center' }]}>{Categories[item.category]}</Text>
-            <Text style={[styles.text, { textAlign: 'right' }]}>{item.price}:-</Text>
-            <Text style={[styles.text, { textAlign: 'right' }]}>{item.articleId}</Text>
-        </View>
+        <Animated.View style={{
+            transform: [{ translateX: pan.x }, { translateY: pan.y }],
+        }} {...panResponder.panHandlers} >
+            <View style={styles.item}>
+                <Text style={[styles.text,]}>{item.name}</Text>
+                <Text style={[styles.text, { textAlign: 'center' }]}>{Categories[item.category]}</Text>
+                <Text style={[styles.text, { textAlign: 'right' }]}>{item.price}:-</Text>
+                <Text style={[styles.text, { textAlign: 'right' }]}>{item.articleId}</Text>
+            </View>
+        </Animated.View >
     )
 }
 
@@ -37,7 +75,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
 
         paddingVertical: 15,
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
 
         borderRadius: 10,
         borderWidth: 1,

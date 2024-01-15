@@ -1,18 +1,16 @@
 import React from 'react';
-import { StyleSheet, Pressable } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { StackScreens } from '../navigation/screenTypes';
 
 interface AddFabProps {
-    navigation: NativeStackNavigationProp<StackScreens>;
+    setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddFab: React.FC<AddFabProps> = ({ navigation }) => {
+const AddFab: React.FC<AddFabProps> = ({ setIsVisible }) => {
     return (
         <Pressable
             style={({ pressed }) => [styles.AddFab, pressed && styles.AddFabPressed]}
-            onPress={() => navigation.navigate('AddScreen')}
+            onPress={() => setIsVisible(true)}
         >
             <Ionicons name="add-circle" size={70} color={'white'} />
         </Pressable>
