@@ -1,10 +1,14 @@
 import React, { useRef } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, PanResponder, Animated } from 'react-native';
+import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
+import { Text, View, StyleSheet, PanResponder, Animated } from 'react-native';
+import { StackScreens } from '../navigation/screenTypes';
+import { useAtom } from 'jotai';
+
 import Layout from '../constants/Layout'
 import Categories from '../constants/categories';
 import Colors from '../constants/AppColors';
-import ItemsManager from '../classes/ItemsManager';
-
+import { ItemsManagerAtom } from '../hooks/itemsManagerAtom';
+import { Item } from '../interfaces/Item';
 
 interface TodoItemProps {
     item: {
@@ -13,10 +17,11 @@ interface TodoItemProps {
         price: number;
         articleId: number;
     }
-    itemManager: ItemsManager
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ item, itemManager }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
+    const [itemsManager] = useAtom(ItemsManagerAtom);
+    const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
     const screenWidth = Layout.window.width;
     const pan = useRef(new Animated.ValueXY()).current;
 
@@ -34,16 +39,25 @@ const TodoItem: React.FC<TodoItemProps> = ({ item, itemManager }) => {
     const panResponder = useRef(
         PanResponder.create({
             onMoveShouldSetPanResponder: () => true,
-            onPanResponderMove: Animated.event([null, { dx: pan.x }]),
+            onPanResponderMove: Animated.event(
+                [null, { dx: pan.x }],
+                { useNativeDriver: false }
+            ),
             onPanResponderRelease: (_, gestureState) => {
-                if (gestureState.dx < -50) {
-                    deleteAnimation.start(() => {
-                        itemManager.deleteItem(item);
-                    })
-                } else {
-                    resetAnimation.start();
-                }
+                const xAxisActionThreshold = 50;
 
+                // If left-swipe further than xAxisActionThreshold
+                if (gestureState.dx < -xAxisActionThreshold) {
+                    deleteAnimation.start(() => {
+                        itemsManager.deleteItem(item);
+                    })
+                }
+                // If right-swipe further than xAxisActionThreshold
+                if (gestureState.dx > xAxisActionThreshold) {
+                    resetAnimation.start();
+                    navigation.navigate('AddScreen', { itemToEdit: item }); // pass item to addscreeen
+                }
+                resetAnimation.start();
             },
         }),
     ).current;

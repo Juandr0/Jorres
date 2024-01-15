@@ -1,29 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Button } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import AppColors from "../../constants/AppColors";
-import ItemsManager from "../../classes/ItemsManager";
+import { useAtom } from 'jotai';
 import { Item } from "../../interfaces/Item";
 import Categories from "../../constants/categories";
+import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
+import { ItemsManagerAtom } from "../../hooks/itemsManagerAtom";
+import { StackScreens } from "../../navigation/screenTypes";
 
-interface AddScreenProps {
-    setVisibility: () => void;
-    itemsManager: ItemsManager;
-}
-
-const AddScreen: React.FC<AddScreenProps> = ({ setVisibility, itemsManager }) => {
+const AddScreen: React.FC<Item> = (itemToEdit?: Item) => {
     const [pickerOpen, setPickerOpen] = useState(false);
-    const [pickervalue, setPickervalue] = useState(null)
+    const [pickervalue, setPickervalue] = useState<Categories | null>(null);
     const [productName, setProductName] = useState('')
     const [productPrice, setProductPrice] = useState('')
     const [productId, setProductId] = useState('')
 
+    useEffect(() => {
+        if (itemToEdit != null) {
+            setPickervalue(itemToEdit.category);
+            setProductName(itemToEdit.name);
+            setProductPrice(itemToEdit.price.toString());
+            setProductId(itemToEdit.articleId.toString());
+        }
+    }, [])
+
+    const [itemsManager] = useAtom(ItemsManagerAtom);
+    const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
+
     const styles = StyleSheet.create({
         AddScreenContainer: {
             flex: 1,
-            paddingBottom: 40,
-            backgroundColor: AppColors.themeColors.backgroundTertiary
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: AppColors.themeColors.backgroundTertiary,
         },
+        buttonStyling: {
+            margin: 25,
+            height: 50,
+            width: 100,
+            borderRadius: 10,
+            backgroundColor: 'black',
+            borderWidth: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            elevation: 10
+        },
+
         textInput: {
             height: 50,
             width: 250,
@@ -31,21 +54,14 @@ const AddScreen: React.FC<AddScreenProps> = ({ setVisibility, itemsManager }) =>
             borderRadius: 10,
             borderWidth: 1,
             padding: 10,
-            alignSelf: 'center'
+            alignSelf: 'center',
+            backgroundColor: 'white'
         },
         buttonsRow: {
             marginTop: 10,
-            flex: 1,
             flexDirection: 'row',
-            justifyContent: 'center'
-
+            alignSelf: 'center',
         },
-        buttonStyling: {
-            marginHorizontal: 25,
-            width: 100,
-            borderRadius: 10,
-            borderWidth: 1,
-        }
     })
 
     return (
@@ -57,7 +73,6 @@ const AddScreen: React.FC<AddScreenProps> = ({ setVisibility, itemsManager }) =>
                 onChangeText={setProductName}
                 placeholder="Enter name"
             />
-
             <DropDownPicker
                 style={styles.textInput}
                 open={pickerOpen}
@@ -99,16 +114,18 @@ const AddScreen: React.FC<AddScreenProps> = ({ setVisibility, itemsManager }) =>
                                 articleId: parseInt(productId),
                             };
                             itemsManager.addItem(item);
-                            setVisibility();
+                            navigation.goBack();
                         }}
                         title="Save item"
-                        color="blue"
+                        color="white"
                         accessibilityLabel="Save new item"
                     />
                 </View>
                 <View style={styles.buttonStyling}>
                     <Button
-                        onPress={() => setVisibility()}
+                        onPress={() => {
+                            navigation.goBack();
+                        }}
                         title="Cancel"
                         color="red"
                         accessibilityLabel="Cancel"

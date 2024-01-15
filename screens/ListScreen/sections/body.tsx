@@ -3,17 +3,12 @@ import { StyleSheet, View, FlatList, Text, UIManager, LayoutAnimation } from 're
 import TodoItem from '../../../components/TodoItem';
 import Layout from '../../../constants/Layout';
 import Divider from '../../../components/Divider';
-import ItemsManager from '../../../classes/ItemsManager';
+import { useAtom } from 'jotai';
+import { ItemsManagerAtom } from '../../../hooks/itemsManagerAtom'; // Import the atom
 import { Item } from '../../../interfaces/Item';
 
-// Enable layout animations for Android
-UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-
-interface BodyProps {
-    itemsManager: ItemsManager;
-}
-
-const Body: React.FC<BodyProps> = ({ itemsManager }) => {
+const Body: React.FC = ({ }) => {
+    const [itemsManager] = useAtom(ItemsManagerAtom);
     const [items, setItems] = useState(itemsManager.getItems());
 
     useEffect(() => {
@@ -28,7 +23,7 @@ const Body: React.FC<BodyProps> = ({ itemsManager }) => {
     return (
         <View style={styles.body}>
             {items.length === 0 ? (
-                <Text>Add items by pressing the plus sign</Text>
+                <Text style={styles.addItemsText}>Add items by pressing the plus sign</Text>
             ) : (
                 <FlatList
                     keyExtractor={(item) => item.articleId.toString()}
@@ -46,8 +41,15 @@ const Body: React.FC<BodyProps> = ({ itemsManager }) => {
 
 const styles = StyleSheet.create({
     body: {
-        maxHeight: Layout.window.height * 0.67,
+        maxHeight: Layout.window.height * 0.7,
+        minHeight: Layout.window.height * 0.7,
     },
+    addItemsText: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center',
+        padding: 20
+    }
 });
 
 export default Body;
