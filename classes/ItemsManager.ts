@@ -8,7 +8,7 @@ class ItemsManager {
     constructor() {
         this.items = [
             { name: 'Köttfärs', category: Categories.Food, price: 49, articleId: 1 },
-            { name: 'Ben & Jerrys', category: Categories.Snacks, price: 55, articleId: 2 },
+            { name: 'Godis', category: Categories.Snacks, price: 55, articleId: 2 },
             { name: 'Blommor', category: Categories.Other, price: 149, articleId: 3 },
             { name: 'Chips', category: Categories.Snacks, price: 49, articleId: 4 },
             { name: 'Lax', price: 129, category: Categories.Food, articleId: 5 },
@@ -29,10 +29,14 @@ class ItemsManager {
     updateItem(updatedItem: Item) {
         const index = this.getIndex(updatedItem);
         if (index !== -1) {
-            this.items[index] = updatedItem
+            const updatedItems = [...this.items];
+            updatedItems[index] = updatedItem;
+            this.items = updatedItems;
+
             this.notifySubscribers();
         }
     }
+
 
     deleteItem(item: Item) {
         const index = this.getIndex(item);
@@ -47,7 +51,11 @@ class ItemsManager {
     // Helper functions.
 
     getIndex(item: Item) {
-        return this.items.findIndex((i) => i === item)
+        return this.items.findIndex((i) => i.articleId === item.articleId);
+    }
+
+    checkIfItemExist(item: Item) {
+        return this.items.some((i) => i.articleId === item.articleId);
     }
 
 

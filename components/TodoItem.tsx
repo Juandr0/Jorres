@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
-import { Text, View, StyleSheet, PanResponder, Animated } from 'react-native';
+import { useNavigation, NavigationContainerRef, Route } from '@react-navigation/native';
+import { Text, StyleSheet, PanResponder, Animated } from 'react-native';
 import { StackScreens } from '../navigation/screenTypes';
 import { useAtom } from 'jotai';
 
@@ -8,7 +8,6 @@ import Layout from '../constants/Layout'
 import Categories from '../constants/categories';
 import Colors from '../constants/AppColors';
 import { ItemsManagerAtom } from '../hooks/itemsManagerAtom';
-import { Item } from '../interfaces/Item';
 
 interface TodoItemProps {
     item: {
@@ -24,6 +23,17 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
     const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
     const screenWidth = Layout.window.width;
     const pan = useRef(new Animated.ValueXY()).current;
+    const xAxisActionThreshold = 50;
+
+    const animatedBackgroundColors = pan.x.interpolate({
+        inputRange: [-xAxisActionThreshold, 0, xAxisActionThreshold],
+        outputRange: [
+            'rgba(255, 0, 0, 0.6)',
+            Colors.themeColors.backgroundSecondary,
+            'rgba(0, 0, 150, 0.5)',
+        ],
+        extrapolate: 'clamp',
+    });
 
     const deleteAnimation = Animated.timing(pan, {
         toValue: { x: -screenWidth, y: 0 },
@@ -44,8 +54,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
                 { useNativeDriver: false }
             ),
             onPanResponderRelease: (_, gestureState) => {
-                const xAxisActionThreshold = 50;
-
                 // If left-swipe further than xAxisActionThreshold
                 if (gestureState.dx < -xAxisActionThreshold) {
                     deleteAnimation.start(() => {
@@ -54,8 +62,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
                 }
                 // If right-swipe further than xAxisActionThreshold
                 if (gestureState.dx > xAxisActionThreshold) {
-                    resetAnimation.start();
-                    navigation.navigate('AddScreen', { itemToEdit: item }); // pass item to addscreeen
+                    navigation.navigate('AddScreen', { itemToEdit: item });
                 }
                 resetAnimation.start();
             },
@@ -65,13 +72,14 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
     return (
         <Animated.View style={{
             transform: [{ translateX: pan.x }, { translateY: pan.y }],
+
         }} {...panResponder.panHandlers} >
-            <View style={styles.item}>
+            <Animated.View style={[styles.item, { backgroundColor: animatedBackgroundColors }]}>
                 <Text style={[styles.text,]}>{item.name}</Text>
                 <Text style={[styles.text, { textAlign: 'center' }]}>{Categories[item.category]}</Text>
                 <Text style={[styles.text, { textAlign: 'right' }]}>{item.price}:-</Text>
                 <Text style={[styles.text, { textAlign: 'right' }]}>{item.articleId}</Text>
-            </View>
+            </Animated.View>
         </Animated.View >
     )
 }
@@ -98,8 +106,8 @@ const styles = StyleSheet.create({
     },
     text: {
         flex: 1,
-        color: 'white',
         fontSize: 16,
+        color: 'white'
     },
 
 })

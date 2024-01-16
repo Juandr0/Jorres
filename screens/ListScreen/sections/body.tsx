@@ -29,7 +29,7 @@ const Body: React.FC = ({ }) => {
                     keyExtractor={(item) => item.articleId.toString()}
                     data={items}
                     renderItem={({ item }) => (
-                        <TodoItem item={item} itemManager={itemsManager} />
+                        <TodoItem item={item} />
                     )}
                     contentContainerStyle={{ paddingBottom: 10 }}
                 />
