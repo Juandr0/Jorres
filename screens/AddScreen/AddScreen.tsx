@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, TextInput, StyleSheet, Button } from "react-native";
+import { View, TextInput, StyleSheet, Button, Alert } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import AppColors from "../../constants/AppColors";
 import { useAtom } from 'jotai';
@@ -24,8 +24,8 @@ const AddScreen: React.FC<AddScreenProps> = (props) => {
         if (itemToEdit) {
             setPickervalue(itemToEdit.category);
             setProductName(itemToEdit.name);
-            setProductPrice(itemToEdit.price?.toString());
-            setProductId(itemToEdit.articleId?.toString());
+            setProductPrice(itemToEdit.price.toString());
+            setProductId(itemToEdit.articleId.toString());
         }
     }, [itemToEdit]);
 
@@ -66,7 +66,43 @@ const AddScreen: React.FC<AddScreenProps> = (props) => {
             flexDirection: 'row',
             alignSelf: 'center',
         },
+        grayedOut: {
+            backgroundColor: AppColors.themeColors.backgroundPrimary
+        }
     })
+
+    const addOrUpdateItem = () => {
+        if (!productName || pickervalue === null || !productPrice || !productId) {
+            Alert.alert(
+                'Incomplete Information',
+                'Please fill in all fields before saving.',
+                [{ text: 'OK' }]
+            );
+            return;
+        }
+
+        const newItem: Item = {
+            name: productName,
+            category: pickervalue!,
+            price: parseFloat(productPrice),
+            articleId: parseInt(productId),
+        };
+
+        if (itemToEdit) {
+            itemsManager.updateItem(newItem);
+        } else {
+            if (itemsManager.checkIfItemExist(newItem)) {
+                Alert.alert(
+                    'Duplicate Article ID',
+                    `An item with Article ID ${newItem.articleId} already exists.`,
+                    [{ text: 'OK' }]
+                );
+                return;
+            }
+            itemsManager.addItem(newItem);
+        }
+        navigation.goBack();
+    }
 
     return (
         <View style={styles.AddScreenContainer}>
@@ -100,31 +136,22 @@ const AddScreen: React.FC<AddScreenProps> = (props) => {
                 placeholder="Enter price"
             />
             <TextInput
-                style={styles.textInput}
+                style={
+                    [
+                        styles.textInput,
+                        itemToEdit ? styles.grayedOut : null
+                    ]}
                 value={productId}
                 onChangeText={setProductId}
                 keyboardType="numeric"
                 placeholder="Enter Article id number"
+                editable={!itemToEdit}
             />
 
             <View style={styles.buttonsRow}>
                 <View style={styles.buttonStyling}>
                     <Button
-                        onPress={() => {
-                            const newItem: Item = {
-                                name: productName,
-                                category: pickervalue!,
-                                price: parseFloat(productPrice),
-                                articleId: parseInt(productId),
-                            };
-
-                            if (itemToEdit) {
-                                itemsManager.updateItem(newItem);
-                            } else {
-                                itemsManager.addItem(newItem);
-                            }
-                            navigation.goBack();
-                        }}
+                        onPress={() => addOrUpdateItem()}
                         title="Save item"
                         color="white"
                         accessibilityLabel="Save new item"

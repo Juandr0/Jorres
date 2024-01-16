@@ -19,7 +19,13 @@ export default function App() {
         <NavigationContainer>
           <Stack.Navigator initialRouteName='HomeScreen'>
             <Stack.Screen name='HomeScreen' component={ListScreen} options={{ title: 'Admin page' }} />
-            <Stack.Screen name='AddScreen' component={AddScreen} initialParams={{ itemToEdit: undefined }} options={{ title: 'Add new product' }} />
+            <Stack.Screen name='AddScreen' component={AddScreen}
+              initialParams={{ itemToEdit: undefined }}
+              options={({ route }) => ({
+                title: route.params && route.params.itemToEdit
+                  ? 'Edit Product'
+                  : 'Add Product',
+              })} />
           </Stack.Navigator>
         </NavigationContainer>
         <StatusBar style="auto" />
