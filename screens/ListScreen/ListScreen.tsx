@@ -14,11 +14,11 @@ interface IProps {
 
 const ListScreen: React.FC<IProps> = () => {
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Header />
             <Body />
             <AddFab />
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.themeColors.backgroundPrimary,
-        justifyContent: 'flex-start'
     },
 });
 

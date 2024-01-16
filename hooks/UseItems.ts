@@ -1,6 +1,7 @@
 import { Item } from '../interfaces/Item';
 import { useAtom } from 'jotai';
-import { ItemsListAtom } from './ItemsManagerAtom';
+import { ItemsListAtom } from './itemsManagerAtom';
+
 
 export const useItems = () => {
     const [items, setItems] = useAtom(ItemsListAtom)

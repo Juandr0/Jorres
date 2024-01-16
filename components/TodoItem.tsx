@@ -55,7 +55,6 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
                 // If left-swipe further than xAxisActionThreshold
                 if (gestureState.dx < -xAxisActionThreshold) {
                     deleteAnimation.start(() => {
-                        console.log('Deleting item:', item);
                         deleteItem(item);
                     })
                 }
