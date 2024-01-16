@@ -1,4 +1,4 @@
 import { atom } from 'jotai';
-import ItemsManager from '../classes/ItemsManager';
+import { MockItems } from '../constants/MockItems';
 
-export const ItemsManagerAtom = atom(new ItemsManager());
+export const ItemsListAtom = atom(MockItems);

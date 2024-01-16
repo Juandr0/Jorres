@@ -22,8 +22,8 @@ const AddFab: React.FC = () => {
 const styles = StyleSheet.create({
     AddFab: {
         position: 'absolute',
-        right: 4,
-        bottom: 4,
+        right: 10,
+        bottom: 30,
     },
     AddFabPressed: {
         opacity: 0.7,

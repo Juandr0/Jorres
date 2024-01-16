@@ -6,12 +6,13 @@ import Body from './sections/body';
 import Colors from '../../constants/AppColors';
 import { StackScreens } from '../../navigation/screenTypes';
 import AddFab from '../../components/AddFab';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface IProps {
     navigation: NativeStackNavigationProp<StackScreens>;
 }
 
-const ListScreen: React.FC<IProps> = ({ }) => {
+const ListScreen: React.FC<IProps> = () => {
     return (
         <View style={styles.container}>
             <Header />

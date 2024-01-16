@@ -1,7 +1,5 @@
-enum categories {
+export enum Categories {
     Food,
     Snacks,
     Other
 }
-
-export default categories;
