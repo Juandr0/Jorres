@@ -4,13 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
 import { StackScreens } from '../navigation/screenTypes';
 
+
 const AddFab: React.FC = () => {
     const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
     return (
         <Pressable
             style={({ pressed }) => [styles.AddFab, pressed && styles.AddFabPressed]}
             onPress={() => {
-                navigation.navigate('AddScreen');
+                navigation.navigate('AddScreen', {});
             }}
         >
             <Ionicons name="add-circle" size={70} color={'white'} />

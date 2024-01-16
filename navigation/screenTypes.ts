@@ -1,4 +1,6 @@
+import { Item } from "../interfaces/Item";
+
 export type StackScreens = {
     HomeScreen: undefined;
-    AddScreen: undefined;
+    AddScreen: { itemToEdit?: Item };
 };

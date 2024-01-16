@@ -8,8 +8,12 @@ import Categories from "../../constants/categories";
 import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
 import { ItemsManagerAtom } from "../../hooks/itemsManagerAtom";
 import { StackScreens } from "../../navigation/screenTypes";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-const AddScreen: React.FC<Item> = (itemToEdit?: Item) => {
+interface AddScreenProps extends NativeStackScreenProps<StackScreens, "AddScreen"> { }
+const AddScreen: React.FC<AddScreenProps> = (props) => {
+    const itemToEdit = props.route.params.itemToEdit;
+
     const [pickerOpen, setPickerOpen] = useState(false);
     const [pickervalue, setPickervalue] = useState<Categories | null>(null);
     const [productName, setProductName] = useState('')
@@ -17,13 +21,13 @@ const AddScreen: React.FC<Item> = (itemToEdit?: Item) => {
     const [productId, setProductId] = useState('')
 
     useEffect(() => {
-        if (itemToEdit != null) {
+        if (itemToEdit) {
             setPickervalue(itemToEdit.category);
             setProductName(itemToEdit.name);
-            setProductPrice(itemToEdit.price.toString());
-            setProductId(itemToEdit.articleId.toString());
+            setProductPrice(itemToEdit.price?.toString());
+            setProductId(itemToEdit.articleId?.toString());
         }
-    }, [])
+    }, [itemToEdit]);
 
     const [itemsManager] = useAtom(ItemsManagerAtom);
     const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
@@ -107,13 +111,18 @@ const AddScreen: React.FC<Item> = (itemToEdit?: Item) => {
                 <View style={styles.buttonStyling}>
                     <Button
                         onPress={() => {
-                            const item: Item = {
+                            const newItem: Item = {
                                 name: productName,
                                 category: pickervalue!,
                                 price: parseFloat(productPrice),
                                 articleId: parseInt(productId),
                             };
-                            itemsManager.addItem(item);
+
+                            if (itemToEdit) {
+                                itemsManager.updateItem(newItem);
+                            } else {
+                                itemsManager.addItem(newItem);
+                            }
                             navigation.goBack();
                         }}
                         title="Save item"
