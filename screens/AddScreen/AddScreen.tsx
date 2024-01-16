@@ -2,23 +2,23 @@ import { useEffect, useState } from "react";
 import { View, TextInput, StyleSheet, Button, Alert } from "react-native";
 import DropDownPicker from 'react-native-dropdown-picker';
 import AppColors from "../../constants/AppColors";
-import { useAtom } from 'jotai';
 import { Item } from "../../interfaces/Item";
-import Categories from "../../constants/categories";
 import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
-import { ItemsManagerAtom } from "../../hooks/itemsManagerAtom";
 import { StackScreens } from "../../navigation/screenTypes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Categories } from "../../constants/Categories";
+import { useItems } from "../../hooks/UseItems";
 
 interface AddScreenProps extends NativeStackScreenProps<StackScreens, "AddScreen"> { }
 const AddScreen: React.FC<AddScreenProps> = (props) => {
+    const { addItem, updateItem } = useItems();
     const itemToEdit = props.route.params.itemToEdit;
-
     const [pickerOpen, setPickerOpen] = useState(false);
     const [pickervalue, setPickervalue] = useState<Categories | null>(null);
     const [productName, setProductName] = useState('')
     const [productPrice, setProductPrice] = useState('')
     const [productId, setProductId] = useState('')
+
 
     useEffect(() => {
         if (itemToEdit) {
@@ -29,7 +29,6 @@ const AddScreen: React.FC<AddScreenProps> = (props) => {
         }
     }, [itemToEdit]);
 
-    const [itemsManager] = useAtom(ItemsManagerAtom);
     const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
 
     const styles = StyleSheet.create({
@@ -89,17 +88,17 @@ const AddScreen: React.FC<AddScreenProps> = (props) => {
         };
 
         if (itemToEdit) {
-            itemsManager.updateItem(newItem);
+            updateItem(newItem);
         } else {
-            if (itemsManager.checkIfItemExist(newItem)) {
-                Alert.alert(
-                    'Duplicate Article ID',
-                    `An item with Article ID ${newItem.articleId} already exists.`,
-                    [{ text: 'OK' }]
-                );
-                return;
-            }
-            itemsManager.addItem(newItem);
+            // if (itemsManager.checkIfItemExist(newItem)) {
+            //     Alert.alert(
+            //         'Duplicate Article ID',
+            //         `An item with Article ID ${newItem.articleId} already exists.`,
+            //         [{ text: 'OK' }]
+            //     );
+            //     return;
+            // }
+            addItem(newItem);
         }
         navigation.goBack();
     }

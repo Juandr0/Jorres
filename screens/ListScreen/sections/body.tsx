@@ -3,22 +3,11 @@ import { StyleSheet, View, FlatList, Text, UIManager, LayoutAnimation } from 're
 import TodoItem from '../../../components/TodoItem';
 import Layout from '../../../constants/Layout';
 import Divider from '../../../components/Divider';
-import { useAtom } from 'jotai';
-import { ItemsManagerAtom } from '../../../hooks/itemsManagerAtom'; // Import the atom
-import { Item } from '../../../interfaces/Item';
+import { useItems } from '../../../hooks/UseItems';
 
 const Body: React.FC = ({ }) => {
-    const [itemsManager] = useAtom(ItemsManagerAtom);
-    const [items, setItems] = useState(itemsManager.getItems());
+    const { items } = useItems();
 
-    useEffect(() => {
-        const callback = (newItems: Item[]) => {
-            setItems(newItems);
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        };
-
-        itemsManager.subscribe(callback);
-    }, [itemsManager]);
 
     return (
         <View style={styles.body}>

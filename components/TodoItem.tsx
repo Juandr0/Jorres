@@ -1,13 +1,11 @@
 import React, { useRef } from 'react';
-import { useNavigation, NavigationContainerRef, Route } from '@react-navigation/native';
+import { useNavigation, NavigationContainerRef } from '@react-navigation/native';
 import { Text, StyleSheet, PanResponder, Animated } from 'react-native';
 import { StackScreens } from '../navigation/screenTypes';
-import { useAtom } from 'jotai';
-
 import Layout from '../constants/Layout'
-import Categories from '../constants/categories';
 import Colors from '../constants/AppColors';
-import { ItemsManagerAtom } from '../hooks/itemsManagerAtom';
+import { useItems } from '../hooks/UseItems';
+import { Categories } from '../constants/Categories';
 
 interface TodoItemProps {
     item: {
@@ -19,7 +17,7 @@ interface TodoItemProps {
 }
 
 const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
-    const [itemsManager] = useAtom(ItemsManagerAtom);
+    const { deleteItem } = useItems();
     const navigation = useNavigation<NavigationContainerRef<StackScreens>>();
     const screenWidth = Layout.window.width;
     const pan = useRef(new Animated.ValueXY()).current;
@@ -57,7 +55,8 @@ const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
                 // If left-swipe further than xAxisActionThreshold
                 if (gestureState.dx < -xAxisActionThreshold) {
                     deleteAnimation.start(() => {
-                        itemsManager.deleteItem(item);
+                        console.log('Deleting item:', item);
+                        deleteItem(item);
                     })
                 }
                 // If right-swipe further than xAxisActionThreshold
